@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::get('quality',QualityController::class . '@index');
 Route::post('quality',QualityController::class . '@store');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

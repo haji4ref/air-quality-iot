@@ -27,4 +27,9 @@ class QualityController extends Controller
         return 'OK';
         
     }
+
+    public function index()
+    {
+        return Quality::all();
+    }
 }
