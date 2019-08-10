@@ -11,6 +11,20 @@ class QualityController extends Controller
     public function store(Request $request)
     {
         Log::info($request->all());
-        // Quality::create([])
+
+        $gas_values = explode(',',$request->get('payload_fields')['text']);
+        
+        $inserts = [];
+        foreach($gas_values as $gas_value){
+            $explodedByColumn = explode(':',$gas_value);
+            $key = $explodedByColumn[0];
+            $value = floatval($explodedByColumn[1]);
+            $inserts[$key] = $value;
+        }
+
+        Quality::create($inserts);
+
+        return 'OK';
+        
     }
 }
