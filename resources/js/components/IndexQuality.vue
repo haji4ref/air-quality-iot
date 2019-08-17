@@ -2,28 +2,23 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Air Quality</div>
+                <el-card>
+                    <div slot="header">Air Quality</div>
 
-                    <div class="card-body">
-                    <table class="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">CO</th>
-                        <th scope="col">time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(item,index) in tableData" :key="index">
-                            <th scope="row">{{item.id}}</th>
-                            <td>{{item.CO}}</td>
-                            <td>{{item.created_at}}</td>
-                        </tr>
-                    </tbody>
-                    </table>
-                    </div>
-                </div>
+                    <el-table :data="tableData" border empty-text="There is no data:(">
+                        <el-table-column prop='id' label="#"></el-table-column>
+                        <el-table-column prop='CO' label="CO"></el-table-column>
+                        <el-table-column prop='created_at' label="time"></el-table-column>
+                    </el-table>
+
+                    <el-pagination
+                        class="text-center my-2"
+                        layout="prev, pager, next"
+                        :current-page.sync="currentPage"
+                        @current-change="fetchData"
+                        :total="50">
+                    </el-pagination>
+                </el-card>
             </div>
         </div>
     </div>
@@ -34,14 +29,18 @@ import { setTimeout } from 'timers';
     export default {
         data(){
             return{
-                tableData:[]
+                tableData:[],
+                currentPage:1,
             }
         },
         methods:{
             fetchData(){
-                window.axios('http://185.55.226.137:8080/api/quality')
+                //185.55.226.137:8080
+                // air
+
+                window.axios(`http://185.55.226.137:8080/api/quality?page=${this.currentPage}`)
                 .then((res)=>{
-                    this.tableData = res.data;
+                    this.tableData = res.data.data;
                 })
             }
         },

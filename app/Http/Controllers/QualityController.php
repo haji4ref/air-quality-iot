@@ -26,8 +26,8 @@ class QualityController extends Controller
         
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return Quality::all();
+        return Quality::paginate(10, ['*'], 'page', $request->get('page'));
     }
 }
