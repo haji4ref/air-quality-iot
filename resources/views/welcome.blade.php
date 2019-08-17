@@ -4,13 +4,13 @@
         <meta charset="utf-8">
         <title>Laravel</title>
 
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        <link rel="stylesheet" href="{{ mix('air/css/app.css') }}">
     </head>
     <body>
         <div id="app">
             <index-quality></index-quality>
         </div>
 
-        <script src="{{ mix('js/app.js') }}"></script>
+        <script src="{{ mix('air/js/app.js') }}"></script>
     </body>
 </html>
