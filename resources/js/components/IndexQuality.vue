@@ -39,7 +39,7 @@ import { setTimeout } from 'timers';
         },
         methods:{
             fetchData(){
-                window.axios('http://185.55.226.137/api/quality')
+                window.axios('http://185.55.226.137/air/api/quality')
                 .then((res)=>{
                     this.tableData = res.data;
                 })

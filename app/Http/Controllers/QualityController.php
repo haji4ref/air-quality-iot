@@ -10,8 +10,6 @@ class QualityController extends Controller
 {
     public function store(Request $request)
     {
-        Log::info($request->all());
-
         $gas_values = explode(',',$request->get('payload_fields')['text']);
         
         $inserts = [];
