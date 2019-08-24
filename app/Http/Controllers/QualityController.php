@@ -28,6 +28,6 @@ class QualityController extends Controller
 
     public function index(Request $request)
     {
-        return Quality::paginate(10, ['*'], 'page', $request->get('page'));
+        return Quality::orderBy('created_at','desc')->paginate(10, ['*'], 'page', $request->get('page'));
     }
 }
