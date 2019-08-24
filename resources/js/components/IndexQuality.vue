@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers';
+import { setTimeout, setInterval } from 'timers';
     export default {
         data(){
             return{
@@ -40,13 +40,13 @@ import { setTimeout } from 'timers';
 
                 window.axios(`http://185.55.226.137:8080/api/quality?page=${this.currentPage}`)
                 .then((res)=>{
-                    Vue.set(this,'tableData',res.data.data);
+                    Vue.set(this,'tableData',res.data.data) ;
                 })
             }
         },
         created() {
             this.fetchData();
-            setTimeout(this.fetchData,10000);
+            setInterval(this.fetchData,10000);
         }
     }
 </script>
