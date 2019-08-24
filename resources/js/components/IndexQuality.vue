@@ -40,7 +40,7 @@ import { setTimeout } from 'timers';
 
                 window.axios(`http://185.55.226.137:8080/api/quality?page=${this.currentPage}`)
                 .then((res)=>{
-                    this.tableData = res.data.data;
+                    Vue.set(this,'tableData',res.data.data);
                 })
             }
         },
