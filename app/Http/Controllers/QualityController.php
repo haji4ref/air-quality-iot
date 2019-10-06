@@ -54,4 +54,13 @@ class QualityController extends Controller {
                       ->groupBy('day')
                       ->get();
     }
+
+    public function qualityMonth($qualityName)
+    {
+        return Quality::selectRaw("MONTH(created_at) as month, ROUND(AVG($qualityName),2) as avg")
+                      ->where('created_at', '>', Carbon::today()->subYear(1))
+                      ->orderBy('month','asc')
+                      ->groupBy('month')
+                      ->get();
+    }
 }
