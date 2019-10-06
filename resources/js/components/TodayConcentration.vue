@@ -12,9 +12,9 @@
                 this.chartOptions.title = {text: ` درامروز ${this.pollutant} غلظت آلاینده `};
                 this.chartOptions.series.push({
                     name: this.pollutant,
-                    data: v.map(e => e[this.pollutant.replace('.', '')])
+                    data: v.map(e => e.avg)
                 });
-                this.chartOptions.xAxis.categories = v.map(e => e.created_at)
+                this.chartOptions.xAxis.categories = v.map(e => e.hour)
             },
         },
         data() {
@@ -23,13 +23,13 @@
                     series: [],
                     tooltip: {
                         formatter: function () {
-                            return `ساعت : ${new persianDate(new Date(this.x)).format('HH:mm')} مقدار : ${englishToPersian(this.y + '')}`
+                            return `ساعت : ${new persianDate(new Date().setHours(this.x,0)).format('HH:mm')} مقدار : ${englishToPersian(this.y + '')}`
                         }
                     },
                     xAxis: {
                         labels: {
                             formatter: function () {
-                                return new persianDate(new Date(this.value)).format('HH:mm');
+                                return new persianDate(new Date().setHours(this.value,0)).format('HH:mm');
                             }
                         }
                     },

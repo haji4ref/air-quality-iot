@@ -34,7 +34,11 @@ class QualityController extends Controller {
 
     public function qualityToday($qualityName)
     {
-        return Quality::where('created_at', '>', Carbon::today())->get([$qualityName, 'created_at']);
+        return Quality::selectRaw("HOUR(created_at) as hour, ROUND(AVG($qualityName),2) as avg")
+                      ->where('created_at', '>', Carbon::today())
+                      ->orderBy('hour','asc')
+                      ->groupBy('hour')
+                      ->get();
     }
 
     public function qualityDaysInWeek($qualityName)
