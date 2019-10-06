@@ -4,12 +4,12 @@
 
 <script>
     export default {
-        name: "DaysConcentration",
+        name: "DaysInMonthConcentration",
         props: ['data', 'pollutant'],
         watch: {
             data(v) {
                 this.chartOptions.series = [];
-                this.chartOptions.title = {text: ` در طول هفته گذشته ${this.pollutant} میانگین غلظت آلاینده `};
+                this.chartOptions.title = {text: ` در طول ماه گذشته ${this.pollutant} میانگین غلظت آلاینده `};
                 this.chartOptions.series.push({
                     name: this.pollutant,
                     data: v.map(e => e.avg)
@@ -23,13 +23,13 @@
                     series: [],
                     tooltip: {
                         formatter: function () {
-                            return `روز : ${new persianDate(new Date(this.x)).format('dddd')} مقدار : ${englishToPersian(this.y + '')}`
+                            return `تاریخ : ${new persianDate(new Date(this.x)).format('MM/DD')} مقدار : ${englishToPersian(this.y + '')}`
                         }
                     },
                     xAxis: {
                         labels: {
                             formatter: function () {
-                                return new persianDate(new Date(this.value)).format('dddd');
+                                return new persianDate(new Date(this.value)).format('MM/DD');
                             }
                         }
                     },

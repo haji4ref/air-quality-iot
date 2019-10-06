@@ -45,4 +45,13 @@ class QualityController extends Controller {
                       ->groupBy('day')
                       ->get();
     }
+
+    public function qualityDaysInMonth($qualityName)
+    {
+        return Quality::selectRaw("DATE(created_at) as day, ROUND(AVG($qualityName),2) as avg")
+                      ->where('created_at', '>', Carbon::today()->subMonth(1))
+                      ->orderBy('day','asc')
+                      ->groupBy('day')
+                      ->get();
+    }
 }

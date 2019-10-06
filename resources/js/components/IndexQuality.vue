@@ -54,9 +54,10 @@
 <script>
     import TodayConcentration from "./TodayConcentration";
     import DaysInWeekConcentration from './DaysInWeekConcentration';
+    import DaysInMonthConcentration from './DaysInMonthConcentration';
 
     export default {
-        components: {TodayConcentration, DaysInWeekConcentration},
+        components: {TodayConcentration, DaysInWeekConcentration,DaysInMonthConcentration},
         data() {
             return {
                 tableData: [],
@@ -79,7 +80,11 @@
                     },
                     {
                         value: 'days-in-month-concentration',
-                        label: 'در طول ماه گذشته'
+                        label: 'در طول ماه گذشته',
+                        fetchFunction: async () => {
+                            let res = await window.axios(`qualityDaysInMonth/${this.pollutant.replace('.', '')}`);
+                            this.chartData = res.data;
+                        }
                     },
                     {
                         value: 'month-concentration',
@@ -107,7 +112,7 @@
             }
         },
         created() {
-            this.range = this.rangeOptions[1];
+            this.range = this.rangeOptions[2];
             this.pollutants = window.pollutants;
             this.fetchData();
             // setInterval(this.fetchData, 10000);
