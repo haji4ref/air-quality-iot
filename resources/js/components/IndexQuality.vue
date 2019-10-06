@@ -72,8 +72,9 @@
                     {
                         value: 'days-in-week-concentration',
                         label: 'در طول یک هفته گذشته',
-                        fetchFunction: () => {
-                            console.log("Ad");
+                        fetchFunction: async () => {
+                            let res = await window.axios(`qualityDaysInWeek/${this.pollutant.replace('.', '')}`);
+                            this.chartData = res.data;
                         }
                     },
                     {
@@ -106,7 +107,7 @@
             }
         },
         created() {
-            this.range = this.rangeOptions[0];
+            this.range = this.rangeOptions[1];
             this.pollutants = window.pollutants;
             this.fetchData();
             // setInterval(this.fetchData, 10000);
