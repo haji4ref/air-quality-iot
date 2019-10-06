@@ -1,54 +1,48 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <el-card>
+    <el-card>
 
-                    <div class="d-flex">
-                        <div class="flex-grow-1 m-2">
-                            <div>
-                                : آلاینده
-                            </div>
+        <div class="d-flex">
+            <div class="flex-grow-1 m-2">
+                <div>
+                    : آلاینده
+                </div>
 
-                            <el-select class="w-100" v-model="pollutant" placeholder="Select"
-                                       @change="fetchData">
-                                <el-option
-                                        v-for="item in pollutants"
-                                        :key="item"
-                                        :label="item"
-                                        :value="item">
-                                </el-option>
-                            </el-select>
-                        </div>
-
-                        <div class="flex-grow-1 m-2">
-                            <div>
-                                : بازه زمانی
-                            </div>
-
-                            <el-select class="w-100" v-model="range" placeholder="Select"
-                                       @change="changeChart">
-                                <el-option
-                                        v-for="item in rangeOptions"
-                                        :key-value="item.value"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item">
-                                </el-option>
-                            </el-select>
-                        </div>
-
-                    </div>
-
-
-                    <div v-loading="!loaded">
-                        <component :is="range.value" :data="chartData" :pollutant="pollutant"/>
-                    </div>
-
-                </el-card>
+                <el-select class="w-100" v-model="pollutant" placeholder="Select"
+                           @change="fetchData">
+                    <el-option
+                            v-for="item in pollutants"
+                            :key="item"
+                            :label="item"
+                            :value="item">
+                    </el-option>
+                </el-select>
             </div>
+
+            <div class="flex-grow-1 m-2">
+                <div>
+                    : بازه زمانی
+                </div>
+
+                <el-select class="w-100" v-model="range" placeholder="Select"
+                           @change="changeChart">
+                    <el-option
+                            v-for="item in rangeOptions"
+                            :key-value="item.value"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item">
+                    </el-option>
+                </el-select>
+            </div>
+
         </div>
-    </div>
+
+
+        <div v-loading="!loaded">
+            <component :is="range.value" :data="chartData" :pollutant="pollutant"/>
+        </div>
+
+    </el-card>
 </template>
 
 <script>
@@ -130,11 +124,10 @@
                 this.loaded = true;
             },
             changeChart() {
-                if (this.range.isLive){
+                if (this.range.isLive) {
                     this.fetchData();
                     this.interval = setInterval(this.fetchData, 10000);
-                }
-                else {
+                } else {
                     clearInterval(this.interval);
                     this.fetchData();
                 }
