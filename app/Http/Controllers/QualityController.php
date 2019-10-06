@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Quality;
 use Illuminate\Support\Facades\Log;
 
-class QualityController extends Controller
-{
+class QualityController extends Controller {
+
     public function store(Request $request)
     {
-        $gas_values = explode(',',$request->get('payload_fields')['text']);
-        
+        $gas_values = explode(',', $request->get('payload_fields')['text']);
+
         $inserts = [];
-        foreach($gas_values as $gas_value){
-            $explodedByColumn = explode(':',$gas_value);
+        foreach($gas_values as $gas_value) {
+            $explodedByColumn = explode(':', $gas_value);
             $key = $explodedByColumn[0];
             $value = floatval($explodedByColumn[1]);
             $inserts[$key] = $value;
@@ -23,11 +24,16 @@ class QualityController extends Controller
         Quality::create($inserts);
 
         return 'OK';
-        
+
     }
 
     public function index(Request $request)
     {
-        return Quality::orderBy('created_at','desc')->paginate(10, ['*'], 'page', $request->get('page'));
+        return Quality::orderBy('created_at', 'desc')->paginate(10, ['*'], 'page', $request->get('page'));
+    }
+
+    public function qualityToday($qualityName)
+    {
+        return Quality::where('created_at', '>', Carbon::today())->get([$qualityName,'created_at']);
     }
 }

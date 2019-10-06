@@ -3,21 +3,48 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <el-card>
-                    <div slot="header">Air Quality</div>
 
-                    <el-table :data="tableData" border empty-text="There is no data:(">
-                        <el-table-column prop='id' label="#"></el-table-column>
-                        <el-table-column prop='CO' label="CO"></el-table-column>
-                        <el-table-column prop='created_at' label="time"></el-table-column>
-                    </el-table>
+                    <div class="d-flex">
+                        <div class="flex-grow-1 m-2">
+                            <div>
+                                : آلاینده
+                            </div>
 
-                    <el-pagination
-                        class="text-center my-2"
-                        layout="prev, pager, next"
-                        :current-page.sync="currentPage"
-                        @current-change="fetchData"
-                        :total="50">
-                    </el-pagination>
+                            <el-select class="w-100" v-model="pollutant" placeholder="Select"
+                                       @change="fetchData">
+                                <el-option
+                                        v-for="item in pollutants"
+                                        :key="item"
+                                        :label="item"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+                        </div>
+
+                        <div class="flex-grow-1 m-2">
+                            <div>
+                               : بازه زمانی
+                            </div>
+
+                            <el-select class="w-100" v-model="range" placeholder="Select"
+                                       @change="changeChart">
+                                <el-option
+                                        v-for="item in rangeOptions"
+                                        :key-value="item.value"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+                        </div>
+
+                    </div>
+
+
+                    <div v-loading="!loaded">
+                        <component :is="range.value" :data="chartData" :pollutant="pollutant"/>
+                    </div>
+
                 </el-card>
             </div>
         </div>
@@ -25,28 +52,64 @@
 </template>
 
 <script>
-import { setTimeout, setInterval } from 'timers';
+    import TodayConcentration from "./TodayConcentration";
+    import DaysInWeekConcentration from './DaysInWeekConcentration';
+
     export default {
-        data(){
-            return{
-                tableData:[],
-                currentPage:1,
+        components: {TodayConcentration, DaysInWeekConcentration},
+        data() {
+            return {
+                tableData: [],
+                rangeOptions: [
+                    {
+                        value: 'today-concentration',
+                        label: 'امروز',
+                        fetchFunction: async () => {
+                            let res = await window.axios(`qualityToday/${this.pollutant.replace('.', '')}`);
+                            this.chartData = res.data;
+                        }
+                    },
+                    {
+                        value: 'days-in-week-concentration',
+                        label: 'در طول یک هفته گذشته',
+                        fetchFunction: () => {
+                            console.log("Ad");
+                        }
+                    },
+                    {
+                        value: 'days-in-month-concentration',
+                        label: 'در طول ماه گذشته'
+                    },
+                    {
+                        value: 'month-concentration',
+                        label: 'ماه به ماه'
+                    },
+                ],
+                range: null,
+                pollutant: 'CO',
+                currentPage: 1,
+                pollutants: null,
+                chartData: null,
+                loaded: false
             }
         },
-        methods:{
-            fetchData(){
+        methods: {
+            async fetchData() {
                 //185.55.226.137:8080
                 // air
-
-                window.axios(`http://185.55.226.137:8080/api/quality?page=${this.currentPage}`)
-                .then((res)=>{
-                    Vue.set(this,'tableData',res.data.data) ;
-                })
+                this.loaded = false;
+                await this.range.fetchFunction();
+                this.loaded = true;
+            },
+            changeChart() {
+                this.fetchData();
             }
         },
         created() {
+            this.range = this.rangeOptions[0];
+            this.pollutants = window.pollutants;
             this.fetchData();
-            setInterval(this.fetchData,10000);
+            // setInterval(this.fetchData, 10000);
         }
     }
 </script>

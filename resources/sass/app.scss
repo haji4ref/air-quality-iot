@@ -1,6 +1,6 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
-
+@import 'fontiran.css';
 // Variables
 @import 'variables';
 
@@ -8,3 +8,9 @@
 @import '~bootstrap/scss/bootstrap';
 
 @import '~element-ui/lib/theme-chalk/index.css';
+
+
+*{
+    font-family: "IRANSansWeb Light"!Important;
+    text-align: right;
+}

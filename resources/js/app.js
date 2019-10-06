@@ -10,6 +10,9 @@ window.axios = require('axios');
 
 window.Vue = require('vue');
 
+import HighchartsVue from 'highcharts-vue';
+
+Vue.use(HighchartsVue);
 
 import ElementUI from 'element-ui';
 

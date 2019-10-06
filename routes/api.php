@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::get('quality',QualityController::class . '@index');
+Route::get('qualityToday/{qualityName}',QualityController::class . '@qualityToday');
 Route::post('quality',QualityController::class . '@store');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
