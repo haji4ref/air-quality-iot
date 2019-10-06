@@ -1,3 +1,4 @@
+const config = require('../../.env.json');
 window._ = require('lodash');
 
 /**
@@ -35,7 +36,7 @@ window.persianDate = require('persian-date');
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.baseURL = 'http://air/api';
+window.axios.defaults.baseURL = config.url + 'api';
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
