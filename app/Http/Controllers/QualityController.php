@@ -32,11 +32,18 @@ class QualityController extends Controller {
         return Quality::orderBy('created_at', 'desc')->paginate(10, ['*'], 'page', $request->get('page'));
     }
 
+    public function qualityLive($qualityName)
+    {
+        return Quality::where('created_at', '>', Carbon::now()->subMinute(10))
+                      ->orderBy('created_at', 'asc')
+                      ->get([$qualityName, 'created_at']);
+    }
+
     public function qualityToday($qualityName)
     {
         return Quality::selectRaw("HOUR(created_at) as hour, ROUND(AVG($qualityName),2) as avg")
                       ->where('created_at', '>', Carbon::today())
-                      ->orderBy('hour','asc')
+                      ->orderBy('hour', 'asc')
                       ->groupBy('hour')
                       ->get();
     }
@@ -45,7 +52,7 @@ class QualityController extends Controller {
     {
         return Quality::selectRaw("DATE(created_at) as day, ROUND(AVG($qualityName),2) as avg")
                       ->where('created_at', '>', Carbon::today()->subDay(6))
-                      ->orderBy('day','asc')
+                      ->orderBy('day', 'asc')
                       ->groupBy('day')
                       ->get();
     }
@@ -54,7 +61,7 @@ class QualityController extends Controller {
     {
         return Quality::selectRaw("DATE(created_at) as day, ROUND(AVG($qualityName),2) as avg")
                       ->where('created_at', '>', Carbon::today()->subMonth(1))
-                      ->orderBy('day','asc')
+                      ->orderBy('day', 'asc')
                       ->groupBy('day')
                       ->get();
     }
@@ -63,7 +70,7 @@ class QualityController extends Controller {
     {
         return Quality::selectRaw("MONTH(created_at) as month, ROUND(AVG($qualityName),2) as avg")
                       ->where('created_at', '>', Carbon::today()->subYear(1))
-                      ->orderBy('month','asc')
+                      ->orderBy('month', 'asc')
                       ->groupBy('month')
                       ->get();
     }

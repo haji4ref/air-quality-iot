@@ -23,7 +23,7 @@
 
                         <div class="flex-grow-1 m-2">
                             <div>
-                               : بازه زمانی
+                                : بازه زمانی
                             </div>
 
                             <el-select class="w-100" v-model="range" placeholder="Select"
@@ -56,13 +56,29 @@
     import DaysInWeekConcentration from './DaysInWeekConcentration';
     import DaysInMonthConcentration from './DaysInMonthConcentration';
     import MonthConcentration from './MonthConcentration';
+    import LiveConcentration from './LiveConcentration';
 
     export default {
-        components: {TodayConcentration, DaysInWeekConcentration,DaysInMonthConcentration,MonthConcentration},
+        components: {
+            TodayConcentration,
+            DaysInWeekConcentration,
+            DaysInMonthConcentration,
+            MonthConcentration,
+            LiveConcentration
+        },
         data() {
             return {
                 tableData: [],
                 rangeOptions: [
+                    {
+                        value: 'live-concentration',
+                        isLive: true,
+                        label: 'زنده',
+                        fetchFunction: async () => {
+                            let res = await window.axios(`qualityLive/${this.pollutant.replace('.', '')}`);
+                            this.chartData = res.data;
+                        }
+                    },
                     {
                         value: 'today-concentration',
                         label: 'امروز',
@@ -101,7 +117,8 @@
                 currentPage: 1,
                 pollutants: null,
                 chartData: null,
-                loaded: false
+                loaded: false,
+                interval: null
             }
         },
         methods: {
@@ -113,13 +130,21 @@
                 this.loaded = true;
             },
             changeChart() {
-                this.fetchData();
+                if (this.range.isLive){
+                    this.fetchData();
+                    this.interval = setInterval(this.fetchData, 10000);
+                }
+                else {
+                    clearInterval(this.interval);
+                    this.fetchData();
+                }
+
             }
         },
         created() {
-            this.range = this.rangeOptions[3];
+            this.range = this.rangeOptions[0];
             this.pollutants = window.pollutants;
-            this.fetchData();
+            this.changeChart();
             // setInterval(this.fetchData, 10000);
         }
     }
