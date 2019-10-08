@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 |
 */
 Route::get('quality',QualityController::class . '@index');
+
+Route::get('qualityByDate/{date}',QualityController::class . '@qualityByDate');
 Route::get('qualityLive/{qualityName}',QualityController::class . '@qualityLive');
 Route::get('qualityToday/{qualityName}',QualityController::class . '@qualityToday');
 Route::get('qualityDaysInWeek/{qualityName}',QualityController::class . '@qualityDaysInWeek');
